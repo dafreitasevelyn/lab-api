@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .thumb {
+            margin-left: auto;
+            margin-right: auto;
+            display: block
+        }
+        .button {
+            visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+            height: auto;
+        }
+        </style>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        if (window.File && window.FileReader && window.FileList) 
+        {
+            console.log('Todas las APIs soportadas');
+        } else 
+        {
+            alert('La API de FILE no es soportada en este navegador.');
+        }
+        function handleFileSelect(evt) 
+        {
+            var resultado = window.confirm('Cargando...');
+
+            var files = evt.target.files; 
+            for (var i = 0, f; f = files[i]; i++) 
+            {
+                if (!f.type.match('video.*')) 
+                {
+                    window.confirm('Archivo no valido');
+                    continue;
+                }
+            var reader = new FileReader();
+            reader.onload = (function (theFile) 
+                {
+                    return function (e) 
+                    {
+                        var span = document.createElement('span');
+                         span.innerHTML = ['<video id="video" class="thumb" src="',e.target.result,'" title="', escape(theFile.name),'"/>'].join('');
+                         document.getElementById('list').insertBefore(span, null); 
+                    };
+                })(f);
+            reader.readAsDataURL(f);
+            document.getElementById("botones").style.visibility="visible"
+            }               
+        }
+  
+        
+    </script>
+</head>
+<body>
+    <h3>Carga de ficheros</h3>
+    <input type="file" name="files[]" multiple onchange="handleFileSelect(event)" />
+    <br>
+    <output id="list"></output>
+    <div class="button" id="botones" >
+        <button onclick="document.getElementById('video').play();">Reproducir</button>
+        <button onclick="document.getElementById('video').pause();">Pausa</button>
+        <button onclick="document.getElementById('video').volume +=0.1;">Subir Volumen</button>
+        <button onclick="document.getElementById('video').volume -=0.1;">Bajar Volumen</button>
+    </div>
+</body>
+</html>
